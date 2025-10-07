@@ -20,6 +20,8 @@ from sphinx.util import logging
 
 from sphinx_simplepdf.writers.simplepdf import SimplepdfTranslator
 
+import copy
+
 logger = logging.getLogger(__name__)
 
 
@@ -121,14 +123,15 @@ class SimplePdfBuilder(SingleFileHTMLBuilder):
 
         index_path = os.path.join(self.app.outdir, f"{self.app.config.root_doc}.html")
 
+        # no need to fix toc for sphinx 8.1.3
         # Manipulate index.html
-        with open(index_path, "rt", encoding="utf-8") as index_file:
-            index_html = "".join(index_file.readlines())
+        # with open(index_path, "rt", encoding="utf-8") as index_file:
+        #    index_html = "".join(index_file.readlines())
 
-        new_index_html = self._toctree_fix(index_html)
+        # new_index_html = self._toctree_fix(index_html)
 
-        with open(index_path, "wt", encoding="utf-8") as index_file:
-            index_file.writelines(new_index_html)
+        # with open(index_path, "wt", encoding="utf-8") as index_file:
+        #    index_file.writelines(new_index_html)
 
         args = ["weasyprint"]
 
@@ -360,6 +363,28 @@ class SimplePdfBuilder(SingleFileHTMLBuilder):
         return str(soup)
 
 
+def modify_html(app, pagename, templatename, context, doctree):
+    # change toc
+    if 'toc' in context:
+        toc_html = context['toc']
+        soup = BeautifulSoup(toc_html, 'html.parser')
+
+        # traverse all <li? elements
+        for li in soup.find_all('li'):
+            a_tags = li.find_all('a')
+            if a_tags:
+                first_a = a_tags[0]
+
+                # create a duplicate <a> to show page number
+                # two <a> elements could have different styles
+                new_a = copy.deepcopy(first_a)
+                # clear content so only page number is shown by ::after element in css
+                new_a.string = ''
+                first_a.insert_after(new_a)
+
+        context['toc'] = str(soup)
+
+
 def setup(app: Sphinx) -> Dict[str, Any]:
     app.add_config_value("simplepdf_vars", {}, "html", types=[dict])
     app.add_config_value("simplepdf_file_name", None, "html", types=[str])
@@ -375,6 +400,8 @@ def setup(app: Sphinx) -> Dict[str, Any]:
         "simplepdf_sidebars", {"**": ["localtoc.html"]}, "html", types=[dict]
     )
     app.add_builder(SimplePdfBuilder)
+
+    app.connect('html-page-context', modify_html)
 
     return {
         "parallel_read_safe": True,

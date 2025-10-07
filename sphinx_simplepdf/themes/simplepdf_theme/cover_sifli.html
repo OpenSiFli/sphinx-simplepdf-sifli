@@ -1,0 +1,25 @@
+<article id="cover" class="dont-break">
+  <div class="container">
+
+    <!-- Logo -->
+    <div class="client-logo">
+      <img src="_static/logo_white2.png" alt="SiFli">
+    </div>
+
+    <!-- Cover middle -->
+    <div class="cover-middle">
+      <div class="title">
+        <p class="title-chip">{{ chip }}</p>
+        <p class="title-doc-name">{{ doc_name }}</p>
+        <p class="subtitle-cover-version"> {{ version }}</p>
+        <p class="subtitle-cover-doc-id"> {{ doc_id }}</p>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="cover-footer">
+      <p class="copyright">{% trans copyright=copyright|e %}&#169; Copyright {{ copyright }}{% endtrans %}</p>
+      <a class="website" href="https://www.sifli.com/">www.sifli.com</a>
+    </div>
+  </div>
+</article>

@@ -76,6 +76,9 @@
     page-break-before: always;
 
     div {
+        h3 {
+            color: $primary;
+        }
         
         ul {
             list-style: none;
@@ -104,27 +107,30 @@
 
                 a {
                     color: #000000;
-                    //font-size: 15pt;
-                    font-size: 13pt;
+                    font-size: 15pt;
+                    font-family: "FangZheng HeiTi GBK", sans-serif;
+                    // font-size: 13pt;
+                }
+
+                a:first-child::after {
+                    content: leader(' ');
+                    color: #000000;
+                    font-size: 12pt;
                 }
 
                 a::after {
-                    color: $primary;
+                    color: $secondary;
+                    font-size: 13pt;
                     content: target-counter(attr(href url), page);
-                    //content: '123';
-                    // font-size: 15pt;
-
-                    float: right;
-
+                    font-family: "FangZheng HeiTi GBK", sans-serif;
                 }
-
 
                 > ul {
                     list-style: none;
                     padding-left: 0;
 
                     li {
-                        border-top: 0.3pt solid #c1c1c1;
+                        // border-top: 0.3pt dotted #000000;
                         //margin: 0.25cm 0;
                         margin: 0.15cm 0;
                         //padding-top: 0.25cm;
@@ -137,17 +143,21 @@
                         a {
                             color: #000000;
                             font-size: 12pt;
+                            font-family: "Roboto", "FangZheng ShuSong GBK", serif;
                         }
 
+                        a:first-child::after {
+                            content: leader(' . ');
+                            color: #000000;
+                            font-size: 12pt;
 
-                        a::before {
-                            color: $primary;
-                            content: "• ";
-                            //font-size: 40pt;
-                            font-size: 30pt;
-                            //line-height: 13pt;
-                            line-height: 10pt;
-                            vertical-align: bottom;
+                        }
+
+                        a::after {
+                            color: $secondary;
+                            font-size: 13pt;
+                            content: target-counter(attr(href url), page);
+                            font-family: "FangZheng HeiTi GBK", sans-serif;
                         }
 
                         ul {

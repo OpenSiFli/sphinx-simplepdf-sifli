@@ -1,0 +1,149 @@
+name: Manual Build
+
+env:
+  PROJ_NAME: sphinx-simplepdf
+
+on:
+  push:
+    tags: ['*']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: build dist files
+    runs-on: ubuntu-latest
+    outputs:
+      files: ${{ steps.file_list.outputs.files }}
+
+    steps:
+      - name: Determine version tag
+        id: determine-version
+        run: |
+          if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
+            echo "VERSION=latest" >> $GITHUB_OUTPUT
+          elif [[ "${{ github.ref }}" =~ refs/heads/release/(.*) ]]; then
+            VERSION=${BASH_REMATCH[1]}
+            echo "VERSION=${VERSION}" >> $GITHUB_OUTPUT
+          elif [[ "${{ github.ref }}" =~ refs/tags/(.*) ]]; then
+            VERSION=${BASH_REMATCH[1]}
+            echo "VERSION=${VERSION}" >> $GITHUB_OUTPUT
+          else
+            echo "VERSION=unknown" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+
+      - name: Setup python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.11
+
+      - name: Install upload tools
+        run: |
+          sudo apt-get update
+          pip install coscmd tccli
+
+      - name: Install build
+        run: python -m pip install --upgrade build
+
+      - name: Build dist
+        run: python -m build
+
+      - name: Collect build file list
+        id: file_list
+        run: |
+          files=$(ls dist)
+          # 转换成 JSON 数组 ["file1.txt","file2.txt",...]
+          json_files=$(printf '"%s",' $files)
+          json_files="[${json_files%,}]"
+          echo "files=$json_files" >> $GITHUB_OUTPUT
+          echo "Generated JSON: $json_files"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: build-files-temp
+          path: dist/*
+          if-no-files-found: error
+
+      - name: Create Release
+        id: create_release
+        if: github.ref_type == 'tag'
+        uses: ncipollo/release-action@v1
+        with:
+          generateReleaseNotes: true
+          allowUpdates: true
+          artifactErrorsFailBuild: true
+          name: "Release ${{ github.ref_name }}"
+          tag: ${{ github.ref_name }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload each file as release asset
+        if: startsWith(github.ref, 'refs/tags/')
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          for f in dist/*; do
+            name=$(basename "$f")
+            echo "Uploading $f as $name"
+            gh release upload "${{ github.ref_name }}" "$f"
+          done
+      
+      - name: Configure COSCMD
+        run: |
+          coscmd config -a ${{ secrets.COS_DOCS_SECRET_ID }} -s ${{ secrets.COS_DOCS_SECRET_KEY }} -b ${{ secrets.COS_DOCS_BUCKET }} -r ${{ secrets.COS_DOCS_REGION }}
+
+      - name: Upload artifacts to COS
+        if: github.ref_type == 'tag'
+        run: |
+          VERSION=${{ steps.determine-version.outputs.VERSION }}
+          for f in dist/*; do
+            name=$(basename "$f")
+            # Upload to the version-specific directory
+            echo "Uploading $f as $name"
+            coscmd upload -rs --delete --yes "$f" tools/${PROJ_NAME}/$VERSION/
+
+            if [[ "$name" == *.whl ]]; then
+              latest_name="sifli_docs_toolbox-latest-py3-none-any.whl"
+            elif [[ "$name" == *.tar.gz ]]; then
+              latest_name="sifli_docs_toolbox-latest.tar.gz"
+            fi
+           
+            echo "Uploading $f to latest directory as $latest_name"
+            coscmd upload -rs --delete --yes "$f" tools/${PROJ_NAME}/latest/$latest_name
+          done
+          echo "Uploaded artifacts to $VERSION/ and latest/"
+
+      - name: Purge CDN Cache
+        run: |
+          export TENCENTCLOUD_SECRET_ID=${{ secrets.COS_DOCS_SECRET_ID }}
+          export TENCENTCLOUD_SECRET_KEY=${{ secrets.COS_DOCS_SECRET_KEY }}
+          export TENCENTCLOUD_REGION=${{ secrets.COS_DOCS_REGION }}
+          tccli cdn PurgePathCache --cli-unfold-argument --Paths "https://downloads.sifli.com/tools/${PROJ_NAME}/latest/" --FlushType flush
+          tccli cdn PurgePathCache --cli-unfold-argument --Paths "https://downloads.sifli.com/tools/${PROJ_NAME}/$VERSION/" --FlushType flush
+
+
+
+  upload-individual:
+    needs: build
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        file: ${{ fromJSON(needs.build.outputs.files) }}  # 这里动态生成文件列表
+    steps:
+      - name: Download temp artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: build-files-temp
+          path: build
+
+      - name: Upload single file as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.file }}
+          path: build/${{ matrix.file }}
+

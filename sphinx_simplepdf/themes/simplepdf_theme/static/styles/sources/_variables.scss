@@ -25,4 +25,7 @@ $bottom-center-content: config('bottom-center-content', '') !default;
 $bottom-right-content: config('bottom-right-content', '') !default;
 
 $nocover: theme_option('nocover', false) !default;
+$custom_header: theme_option('custom_header', false) !default;
+$custom_footer: theme_option('custom_footer', false) !default;
+$cover_sifli: theme_option('cover_sifli', false) !default;
 

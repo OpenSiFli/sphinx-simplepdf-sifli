@@ -73,3 +73,53 @@
     font-weight: bold;
     src: url(fonts/FiraMono-Bold.ttf);
 }
+
+@font-face {
+  font-family: "FangZheng FangSong GBK";
+  src: url("fonts/FZFSK.TTF") format("truetype");
+}
+
+@font-face {
+  font-family: "FangZheng HeiTi GBK";
+  src: url("fonts/FZHTK.TTF") format("truetype");
+}
+
+@font-face {
+  font-family: "FangZheng ShuSong GBK";
+  src: url("fonts/FZSSK.TTF") format("truetype");
+}
+
+@font-face {
+  font-family: "Noto Sans Mono CJK";
+  src: url("fonts/NotoSansMonoCJKsc-Regular.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "Noto Sans Mono CJK";
+  font-weight: bold;
+  src: url("fonts/NotoSansMonoCJKsc-Bold.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "Fira Mono";
+  src: url("fonts/FiraMono-Regular.ttf") format("truetype"); 
+}
+
+@font-face {
+    font-family: "Roboto";
+    font-weight: 400;
+    src: url(fonts/Roboto-Regular.ttf);
+}
+
+@font-face {
+    font-family: "Roboto Italic";
+    font-style: italic;
+    src: url(fonts/Roboto-Italic.ttf);
+}
+
+@font-face {
+    font-family: "Roboto Bold";
+    font-weight: bold;
+    src: url(fonts/Roboto-Bold.ttf);
+}
+

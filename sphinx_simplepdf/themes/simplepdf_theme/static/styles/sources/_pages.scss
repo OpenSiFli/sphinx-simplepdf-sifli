@@ -11,6 +11,10 @@
   page-break-after: always;
 }
 
+#cover {
+    page: cover;
+}
+
 #back-cover {
     page: back_cover;
     page-break-before: always;
@@ -32,6 +36,118 @@
     page: landscape_page;
 }
 
+.page-header {
+    position: running(header);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    // padding: 0.1cm 0.5cm;
+    box-sizing: border-box;
+    margin-top: 0.5cm; 
+    // padding-bottom: 1cm;
+}
+
+/* logo by left side*/
+.page-header .header-left img {
+    margin-top: 0.2cm; 
+    height: 1.5cm;
+    width: auto;
+
+}
+
+/* title part by right side */
+.page-header .header-right {
+    flex: 1;
+    text-align: right;
+    margin-left: 0.5cm;
+}
+
+.page-header .header-right .title {
+    font-family: "FangZheng HeiTi GBK", sans-serif;
+    font-size: 12pt;
+    font-weight: bold;
+    margin: 0;
+    color: $primary;
+    border-bottom-color: $primary;
+    border-bottom-style: solid;
+    border-bottom-width: 0.01cm;  
+}
+
+.page-header .header-right .subtitle {
+    font-family: "FangZheng HeiTi GBK", sans-serif;
+    font-size: 10pt;
+    font-weight: bold;
+    margin: 0;
+    color: $primary;
+}
+
+.page-footer {
+    position: running(footer);
+    width: 100%;
+}
+
+/* upper part: space alignment */
+.footer-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;           
+
+    border-bottom-color: $primary;
+    border-bottom-style: solid;
+    border-bottom-width: 0.01cm;      
+    margin: 0;
+}
+
+.footer-top p {
+    font-family: "FangZheng HeiTi GBK", sans-serif;
+    color: $primary;
+    font-size: 9pt;
+    margin: 0;
+}
+
+
+.footer-top .page-num {
+    color: $primary;
+    content: counter(page);
+}
+
+/* lower part */
+.footer-bottom {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1em;
+}
+
+.footer-bottom * {
+    font-family: "FangZheng HeiTi GBK", sans-serif;
+    font-size: 9pt;
+    color: $secondary;
+    margin: 0;
+}
+
+@if $custom_header {
+@page {
+    padding-top: 1em;
+    @top-center {
+        content: element(header);
+        width: 100%
+    }
+}
+}
+
+@if $custom_footer {
+@page {
+    padding-top: 1em;
+    @bottom-center {
+        content: element(footer);
+        width: 100%
+    }  
+}
+}
+
+@if not $custom_header {
 @page {
   padding-top: 1em;
 
@@ -67,6 +183,12 @@
     border-bottom-style: solid;
     border-bottom-width: 0.05cm;
   }
+}
+}
+
+@if not $custom_footer {
+@page {
+  padding-top: 1em;
 
   @bottom-left {
     content: $bottom-left-content;
@@ -112,6 +234,7 @@
     border-top-style: solid;
     border-top-width: 0.05cm;
   }
+}
 }
 
 @page:blank {
@@ -203,4 +326,26 @@
     @top-right {
         content: none;
     }
+}
+
+@page cover {
+    @top-left {
+        background: none;
+        content: none;
+    }
+    @top-center {
+        content: none;
+    }
+    @top-right {
+        content: none;
+    }
+    @bottom-left {
+        content: none;
+    }
+    @bottom-center {
+        content: none;
+    }
+    @bottom-right {
+        content: none;
+    }    
 }

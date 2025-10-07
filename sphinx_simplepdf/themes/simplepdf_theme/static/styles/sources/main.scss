@@ -10,6 +10,7 @@
 @import "toc";
 @import "pages";
 @import "cover";
+@import "cover_sifli";
 @import "back-cover";
 @import "text";
 @import "admonition";
@@ -73,11 +74,11 @@ body {
 }
 
 html {
-  color: #393939;
+  color: #000000;
   font-family: Fira Sans;
-  font-size: 11pt;
-  font-weight: 300;
-  line-height: 1.5;
+  font-size: 10pt;
+  font-weight: normal;
+  line-height: 1.6;
 
   body {
     h1 {
@@ -87,7 +88,7 @@ html {
     }
 
     h2, h3, h4 {
-      color: black;
+      color: $primary;
       font-weight: 400;
     }
 

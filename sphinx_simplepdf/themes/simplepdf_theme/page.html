@@ -6,13 +6,28 @@
 {% endblock %}
 {%- block sidebar1 %}
     {%- if render_cover %}
-        {%- include "cover.html" -%}
+        {%- if theme_cover_sifli %}
+            {%- include "cover_sifli.html" -%}
+        {%- else %}
+            {%- include "cover.html" -%}
+        {%- endif %}    
     {%- endif %}
-    {{ sidebar() }}
+    <div class="sphinxsidebarwrapper">
+        <div>
+            <h3>{{ _('Table of Contents') }}</h3>
+            {{ toc }}
+        </div>
+    </div>      
 {% endblock %}
+{%- if theme_custom_header %}
+    {%- include "header.html" -%}
+{%- endif %}
 {% block body %}
     {{ body }}
 {% endblock %}
+{%- if theme_custom_footer %}
+    {%- include "footer.html" -%}
+{%- endif %}
 {%- block footer %}
     {%- if render_cover %}
         {%- include "back_cover.html" -%}

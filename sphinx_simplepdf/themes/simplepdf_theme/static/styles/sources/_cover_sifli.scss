@@ -1,4 +1,4 @@
-@if not $cover_sifli {
+@if $cover_sifli {
 #cover {
     width: 100%;
     // height: 100%;
@@ -44,35 +44,75 @@
             }
         }
 
+        .client-logo {
+            position: absolute;
+            border-radius: 8pt;
+            border: 4px solid white;
+            background-color: white;
+            top: 140pt;
+            left: 50pt;
+            float: left;
+            // height: 100px;
+            // width: 100px;
+
+            img {
+                width: 300px;
+                height: auto;
+            }
+        }
+
         .cover-middle {
             position: relative;
             top: 40%;
-            width: 100%;
+            // width: 100%;
 
             .title {
                 position: absolute;
                 top: 5pt;
-                left: 40pt;
+                left: 0;
+                right: 20pt;
                 height: 150pt;
+                // width: 100%;
 
-                .title-cover {
+                .title-chip {
                     font-family: "Work Sans Bold", sans-serif;
-                    font-size: 45pt;
-                    margin-bottom: 0;
+                    font-size: 30pt;
+                    // margin-bottom: 1pt;
+                    margin: 0;
                     margin-top: 0;
                     margin-left: 0;
                     color: $cover;
+                    text-align: right;
                 }
 
-                .subtitle-cover {
+                .title-doc-name {
+                    font-family: "Work Sans Bold", sans-serif;
+                    font-size: 45pt;
+                    // margin-bottom: 10pt;
+                    margin: 0;
+                    color: $secondary;
+                    text-align: right;
+                }
+
+                .subtitle-cover-version {
                     font-family: "Work Sans Bold", sans-serif;
                     font-weight: bolder;
-                    font-size: 28pt;
+                    font-size: 15pt;
                     // text-transform: uppercase;
                     margin-top: 5pt;
                     color: $cover;
+                    text-align: right;
                 }
 
+                .subtitle-cover-doc-id {
+                    font-family: "Work Sans Bold", sans-serif;
+                    font-weight: bolder;
+                    font-size: 12pt;
+                    // text-transform: uppercase;
+                    margin-top: 5pt;
+                    color: $cover;
+                    text-align: right;
+                }
                 .meta {
                     font-family: 'Work Sans';
                     font-size: 18pt;
@@ -82,22 +122,6 @@
                 }
             }
 
-            .client-logo {
-                position: absolute;
-                border-radius: 8pt;
-                border: 4px solid white;
-                background-color: white;
-                top: 20pt;
-                right: 40pt;
-                float: right;
-                height: 150px;
-                width: 150px;
-
-                img {
-                    width: 150px;
-                    height: 150px;
-                }
-            }
         }
 
         .cover-footer {
@@ -105,14 +129,18 @@
             font-size: 11pt;
             margin-top: 3px;
             position: absolute;
-            bottom: 30pt;
-            color: $white;
-            width: 100%;
-            p {
-                width: 80%;
-                margin: 0 auto;
-                text-align: center;
+            bottom: 4cm;
+            text-align: right;
+            right: 20pt;
+
+            .copyright {
+                color: $cover;
+                margin: 0;
             }
+            .website {
+                color: $secondary;
+                margin: 0;                
+            } 
         }
     }
 }
