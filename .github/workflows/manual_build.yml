@@ -2,6 +2,7 @@ name: Manual Build
 
 env:
   PROJ_NAME: sphinx-simplepdf
+  PKG_NAME: sphinx_simplepdf
 
 on:
   push:
@@ -108,9 +109,9 @@ jobs:
             coscmd upload -rs --delete --yes "$f" tools/${PROJ_NAME}/$VERSION/
 
             if [[ "$name" == *.whl ]]; then
-              latest_name="sifli_docs_toolbox-latest-py3-none-any.whl"
+              latest_name="${PKG_NAME}-latest-py3-none-any.whl"
             elif [[ "$name" == *.tar.gz ]]; then
-              latest_name="sifli_docs_toolbox-latest.tar.gz"
+              latest_name="${PKG_NAME}-latest.tar.gz"
             fi
            
             echo "Uploading $f to latest directory as $latest_name"
