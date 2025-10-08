@@ -2,10 +2,14 @@
     <div class="footer-top">
         <p class="doc-id">{{ doc_id }}</p>
         <p class="page-num"></p>
-        <p class="version">{{ version }}</p>
+        {% if "latest" in version %}
+          <p class="subtitle-cover-version"> {{ version }} ({{ curr_date }})</p>
+        {% else %}
+          <p class="subtitle-cover-version"> {{ version }}</p>
+        {% endif %}  
     </div>
     <div class="footer-bottom">
         <p class="copyright">{% trans copyright=copyright|e %}&#169; Copyright {{ copyright }}{% endtrans %}</p>
-        <a href="https://www.sifli.com/">www.sifli.com</a>
+        <a href="http://{{ theme_website }}">{{ theme_website }}</a>
     </div>
 </header>

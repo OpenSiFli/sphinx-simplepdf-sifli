@@ -3,7 +3,7 @@
 
     <!-- Logo -->
     <div class="client-logo">
-      <img src="_static/logo_white2.png" alt="SiFli">
+      <img src="{{ theme_logo }}" alt="Logo">
     </div>
 
     <!-- Cover middle -->
@@ -11,7 +11,11 @@
       <div class="title">
         <p class="title-chip">{{ chip }}</p>
         <p class="title-doc-name">{{ doc_name }}</p>
-        <p class="subtitle-cover-version"> {{ version }}</p>
+        {% if "latest" in version %}
+          <p class="subtitle-cover-version"> {{ version }} ({{ curr_date }})</p>
+        {% else %}
+          <p class="subtitle-cover-version"> {{ version }}</p>
+        {% endif %}  
         <p class="subtitle-cover-doc-id"> {{ doc_id }}</p>
       </div>
     </div>
@@ -19,7 +23,7 @@
     <!-- Footer -->
     <div class="cover-footer">
       <p class="copyright">{% trans copyright=copyright|e %}&#169; Copyright {{ copyright }}{% endtrans %}</p>
-      <a class="website" href="https://www.sifli.com/">www.sifli.com</a>
+      <a class="website" href="http://{{ theme_website }}">{{ theme_website }}</a>
     </div>
   </div>
 </article>
