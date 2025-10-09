@@ -96,7 +96,7 @@ jobs:
       
       - name: Configure COSCMD
         run: |
-          coscmd config -a ${{ secrets.COS_DOCS_SECRET_ID }} -s ${{ secrets.COS_DOCS_SECRET_KEY }} -b ${{ secrets.COS_DOCS_BUCKET }} -r ${{ secrets.COS_DOCS_REGION }}
+          coscmd config -a ${{ secrets.COS_DOWNLOAD_SECRET_ID }} -s ${{ secrets.COS_DOWNLOAD_SECRET_KEY }} -b ${{ secrets.COS_DOWNLOAD_BUCKET }} -r ${{ secrets.COS_DOWNLOAD_REGION }}
 
       - name: Upload artifacts to COS
         if: github.ref_type == 'tag'
@@ -121,9 +121,9 @@ jobs:
 
       - name: Purge CDN Cache
         run: |
-          export TENCENTCLOUD_SECRET_ID=${{ secrets.COS_DOCS_SECRET_ID }}
-          export TENCENTCLOUD_SECRET_KEY=${{ secrets.COS_DOCS_SECRET_KEY }}
-          export TENCENTCLOUD_REGION=${{ secrets.COS_DOCS_REGION }}
+          export TENCENTCLOUD_SECRET_ID=${{ secrets.COS_DOWNLOAD_SECRET_ID }}
+          export TENCENTCLOUD_SECRET_KEY=${{ secrets.COS_DOWNLOAD_SECRET_KEY }}
+          export TENCENTCLOUD_REGION=${{ secrets.COS_DOWNLOAD_REGION }}
           tccli cdn PurgePathCache --cli-unfold-argument --Paths "https://downloads.sifli.com/tools/${PROJ_NAME}/latest/" --FlushType flush
           tccli cdn PurgePathCache --cli-unfold-argument --Paths "https://downloads.sifli.com/tools/${PROJ_NAME}/$VERSION/" --FlushType flush
 
